@@ -1,0 +1,90 @@
+Sparsenn
+
+Sparsenn is a piece of software for learning neural networks from high
+dimensional sparse data. Sparsenn is written in C and uses the BLAS library for
+vector operations.
+
+Download
+
+The latest version of sparsenn can be found at http://www.cs.cornell.edu/~nk/sparsenn/
+
+The program is free for scientific and educational use. See the file
+LICENSE.txt that comes with the above distribution.
+
+Compiling
+
+You need to have a BLAS library installed in order to compile sparsenn. You can
+use the free ATLAS library or an implementation provided by your hardware
+vendor.
+
+To compile sparsenn you just need to issue the following commands:
+
+            tar -zxvf sparsenn.tar.gz
+            cd sparsenn
+            make
+
+
+Then copy the executables nnlearn and nnclassify to a directory in your PATH.
+
+Usage
+
+Sparsenn consists of a learning program (nnlearn) and a classification program
+(nnclassify). The learning program takes as input a set of training examples
+and a set of validation examples. The validation examples are used for early
+stopping. The program outputs the network it learned. The classification
+program takes as input a model and a set of examples and outputs the
+predictions of the model on the examples.
+
+nnlearn is called this way:
+
+            nnlearn [options] trainingset validationset model
+            Available options:
+                -e <int>  : number of epochs (default: 1000)
+                -h <int>  : number of hidden units (default: 16)
+                -p <int>  : print performance every so many epochs: (default: 10)
+                -r <float>: learning rate (default: 0.05)
+
+
+The input file 'data' contains the training examples. It should be in the 
+SVM-light/LIBSVM format
+
+nnclassify is called this way:
+
+            nnclassify data model predictions
+
+
+The input file 'data' contains the test examples and should be in the same
+format as the training examples.
+
+For each test example, the prediction of the model (stored in the 'model' file)
+is written to the 'predictions' file.
+
+FAQ
+
+Q:How to do regression/multiclass classification?
+
+A:Sparsenn only supports binary classification because it was written for an
+empirical evaluation of algorithms on binary classification problems. However,
+extending the software to support these tasks shouldn't be very hard.
+
+Q:Does sparsenn support anything else other than stochastic gradient descent?
+
+A:No, everything else is too computationally expensive for high dimensional
+data. The only thing that may be supported in the future is stochastic meta
+descent.
+
+Q:Why cannot I make it learn as well as method X?
+
+A:There may be a few reasons for this. First, look at your data. You may have
+to scale your inputs so that the nonzero elements of a typical vector take
+values close to 1. This will make the neurons activate in their linear region
+initially. If your data is on a good scale, try increasing the number of hidden
+units. Too many hidden units won't hurt you as much as too few hidden units.
+The default number of hidden units, 16, may be to small for some problems. Try
+100 hidden units and see if it makes a difference. Finally, check the learning
+rate. If the network is not reducing the squared error on the training data at
+all or very slowly try increasing the learning rate. If the network achieves
+the optimum prefromance in the first few epochs try reducing the learning rate.
+Ideally, you should select the smallest learning rate that gives acceptable
+training times.
+
